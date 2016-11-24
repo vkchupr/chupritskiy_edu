@@ -1,0 +1,28 @@
+SELECT e.first_name, e.last_name, m.subordinates_count
+FROM employees e, (
+    SELECT ee.manager_id, COUNT(ee.employee_id) subordinates_count
+    FROM employees ee
+    GROUP BY ee.manager_id
+) m
+WHERE e.employee_id = m.manager_id
+AND m.subordinates_count > 5
+
+---
+
+SELECT d.department_id, d.department_name, s.average_salary, s.employee_count
+FROM departments d, (
+    SELECT e.department_id, count(e.employee_id) employee_count, ROUND(AVG(e.salary),2) average_salary 
+    FROM employees e
+    GROUP BY e.department_id) s
+WHERE d.department_id = s.department_id
+
+---
+
+SELECT d.department_id, d.department_name, l.city, e.employee_count
+FROM departments d, locations l, (
+    SELECT department_id, count(employee_id) employee_count
+    FROM employees
+    GROUP BY department_id) e
+WHERE d.department_id = e.department_id
+AND d.location_id = l.location_id
+AND e.employee_count > 30
