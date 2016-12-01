@@ -13,9 +13,9 @@ public class Tester {
             System.out.println(string);
         }
 
-//        String[] strings2 = ArrayOfStringGenerator.generateTask1Array(new Scenario(3, 10, 50, 50));
-//        for (String string : strings2) {
-//            System.out.println(string);
-//        }
+        String[] strings2 = ArrayOfStringGenerator.generateTask1Array(new Scenario(3, 10, 50, 50));
+        for (String string : strings2) {
+            System.out.println(string);
+        }
     }
 }
