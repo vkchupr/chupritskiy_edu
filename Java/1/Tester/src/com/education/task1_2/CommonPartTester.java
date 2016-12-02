@@ -31,6 +31,11 @@ public class CommonPartTester {
         int[] vars = sc.getVars();
 
         String[] array = ArrayOfStringGenerator.generateTask2Array(sc);
+
+        for (String string : array) {
+            System.out.println(string);
+        }
+
         String realPrefix = ArrayOfStringGenerator.getPrefix();
 
         long startTime = System.nanoTime();

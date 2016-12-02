@@ -1,8 +1,13 @@
 package com.education.task1_2;
 
 
+import java.util.ArrayList;
+
 public class CommonPartFinderImpl implements CommonPartFinder {
     public String getMaxLengthCommonPrefix(String[] arrayOfString){
+        if(arrayOfString.length == 0)
+            return "";
+
         Boolean flag = true;
         int prefixLength = 0;
 
@@ -21,17 +26,23 @@ public class CommonPartFinderImpl implements CommonPartFinder {
                 break;
             }
         }
-        return (prefixLength == 0) ? "" : arrayOfString[0].substring(0,prefixLength);
+        try {
+            return (prefixLength == 0) ? "" : arrayOfString[0].substring(0, prefixLength);
+        }catch(StringIndexOutOfBoundsException se){
+            return arrayOfString[0].substring(0, prefixLength-1);
+        }
     }
 
     public String getMaxLengthCommonPart(String[] arrayOfString) {
-        if(arrayOfString.length < 2)
-            return arrayOfString[0];
+/*        if(arrayOfString.length == 0)
+            return "";
+
+        if(arrayOfString.length == 1)
+            return arrayOfString[0];*/
 
         int[][] commonPartMatrix = new int[arrayOfString[0].length()][arrayOfString[1].length()];
-        int commonPartLength = 0;
-        int commonPartPos = 0;
-        String commonPart;
+
+        ArrayList<String> commonPartList = new ArrayList<>();
 
         for(int i = 0; i < commonPartMatrix.length; i++){
             for(int j = 0; j < commonPartMatrix[0].length; j++){
@@ -40,22 +51,39 @@ public class CommonPartFinderImpl implements CommonPartFinder {
                         commonPartMatrix[i][j] = commonPartMatrix[i-1][j-1] + 1;
                     else
                         commonPartMatrix[i][j] = 1;
-
-                    if(commonPartMatrix[i][j] > commonPartLength){
-                        commonPartLength = commonPartMatrix[i][j];
-                        commonPartPos = i;
-                    }
-
                 }
             }
         }
-        commonPart = arrayOfString[0].substring(commonPartPos - commonPartLength + 1, commonPartPos + 1);
 
-        for(int i = 0; i < arrayOfString.length; i++){
-            if(!arrayOfString[i].contains(commonPart)){
-                return "";
+        for(int i = 0; i < commonPartMatrix.length; i++){
+            for(int j = 0; j < commonPartMatrix[0].length; j++){
+                if(commonPartMatrix[i][j] > 1)
+                    commonPartList.add(arrayOfString[0].substring(i-commonPartMatrix[i][j] + 1, i + 1));
             }
         }
-        return commonPart;
+
+        String result = "";
+
+        Boolean flag;
+
+        for(String commonPart : commonPartList){
+            flag = true;
+            for(String arrayString : arrayOfString)
+                if(!arrayString.contains(commonPart))
+                    flag = false;
+
+            if(flag)
+                if(commonPart.length() > result.length())
+                    result = commonPart;
+        }
+
+        if(result == ""){
+            System.out.println("common_part: none");
+            return "";
+            
+        }else {
+            System.out.println("common_part: " + result);
+            return result;
+        }
     }
 }
